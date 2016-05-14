@@ -2,22 +2,33 @@
 import xbmc
 import xbmcgui
 import xbmcplugin
+import xbmcaddon
 import urllib
 import sys
+
 hideAudioDisa = True
+icon = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('path')+'/icon.png').decode('utf-8')
+fanart = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('path')+'/fanart.jpg').decode('utf-8')
+translation = xbmcaddon.Addon(id='script.module.libMediathek').getLocalizedString
+
 
 def addEntry(dict):	
+	
+	if 'type' in dict and dict['type'] == 'nextPage':
+		dict['name'] = translation(31040)
 	if isinstance(dict["name"], unicode):
 		dict["name"] = dict["name"].encode('utf-8')
+	dict["name"] = urllib.unquote_plus(dict["name"])
+	dict["name"] = dict["name"].replace('&amp;','&')
 	if hideAudioDisa:
 		if 'Hörfassung' in dict["name"] or 'Audiodeskription' in dict["name"]:
 			return False
 			
 	u = _buildUri(dict)
 	ok=True
-	liz=xbmcgui.ListItem(dict.get('name',''), iconImage="DefaultFolder.png", thumbnailImage=dict.get('thumb',''))
+	liz=xbmcgui.ListItem(dict.get('name',''), iconImage="DefaultFolder.png", thumbnailImage=dict.get('thumb',icon))
 	liz.setInfo( type="Video", infoLabels={ "Title": dict.get('name','') , "Plot": dict.get('plot','') , "Plotoutline": dict.get('plot','') , "Duration": dict.get('duration','') } )
-	liz.setProperty('fanart_image',dict.get('fanart',dict.get('thumb','')))
+	liz.setProperty('fanart_image',dict.get('fanart',dict.get('thumb',fanart)))
 	xbmcplugin.setContent( handle=int( sys.argv[ 1 ] ), content="episodes" )
 	if 'type' in dict and dict['type'] == 'video':
 		liz.setProperty('IsPlayable', 'true')
