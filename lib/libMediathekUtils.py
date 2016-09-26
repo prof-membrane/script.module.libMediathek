@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import urllib
 import urllib2
 import socket
@@ -8,6 +9,12 @@ import re
 temp = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile')+'temp').decode('utf-8')
 dict = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile')+'dict.py').decode('utf-8')
 
+
+def log(msg):
+	xbmc.log(msg)
+
+def getTranslation(id):
+	return xbmcaddon.Addon(id='script.module.libMediathek').getLocalizedString(id)
 def getUrl(url):
     xbmc.log(url)
     req = urllib2.Request(url)
@@ -17,6 +24,13 @@ def getUrl(url):
     response.close()
     return link
 	
+
+def clearString(s):
+	s = s.replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&").replace("&#034;", "\"").replace("&#039;", "'").replace("&quot;", "\"").replace("&szlig;", "ß").replace("&ndash;", "-")
+	s = s.replace("&Auml;", "Ä").replace("&Uuml;", "Ü").replace("&Ouml;", "Ö").replace("&auml;", "ä").replace("&uuml;", "ü").replace("&ouml;", "ö").replace("&eacute;", "é").replace("&egrave;", "è")
+	s = s.replace("&#x00c4;","Ä").replace("&#x00e4;","ä").replace("&#x00d6;","Ö").replace("&#x00f6;","ö").replace("&#x00dc;","Ü").replace("&#x00fc;","ü").replace("&#x00df;","ß")
+	s = s.replace("&apos;","'").strip()
+	return s
 		
 	
 def f_open(path):

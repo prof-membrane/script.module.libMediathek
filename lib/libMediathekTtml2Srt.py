@@ -10,7 +10,9 @@ import xbmcvfs
 
 subFile = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile')+'/sub.srt').decode('utf-8')
 
-	
+def ttml2Srt(url):
+	return _newSubtitle(url)
+"""	
 def setSubtitle(uri,offset=0):
 	if offset != 0:
 		print offset
@@ -19,8 +21,8 @@ def setSubtitle(uri,offset=0):
 		newSubtitle(baseUrl+uri)
 	else:
 		oldSubtitle(baseUrl+uri)
-
-def newSubtitle(url):
+"""
+def _newSubtitle(url):
 	#if os.path.exists(subFile):
 	#	os.remove(subFile)
 	if xbmcvfs.exists(subFile):
@@ -73,7 +75,7 @@ def newSubtitle(url):
 		f.close()
 		return subFile
 
-def oldSubtitle(url):
+def _oldSubtitle(url):
 	if os.path.exists(subFile):
 		os.remove(subFile)
 	try:
